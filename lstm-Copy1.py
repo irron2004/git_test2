@@ -6,7 +6,7 @@ import random as rnd
 # visualization
 import seaborn as sns
 import matplotlib.pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 
 # machine learning
 from sklearn.linear_model import LogisticRegression
@@ -17,10 +17,12 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import Perceptron
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
+import os
+print(os.listdir())
 
+train_df = pd.read_csv('./git_test2/train.csv')
+test_df = pd.read_csv('./git_test2/test.csv')
 
-train_df = pd.read_csv('./train.csv')
-test_df = pd.read_csv('./test.csv')
 combine = [train_df, test_df]
 
 print(train_df.columns.values)
@@ -195,7 +197,13 @@ train_df = train_df.drop(['FareBand'], axis=1)
 combine = [train_df, test_df]
     
 train_df.head(10)
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
+X = train_df.drop('Survived', axis=1)
+y = train_df.Survived
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.3)
 
 # Logistic Regression
 
@@ -243,20 +251,19 @@ Y_pred = perceptron.predict(X_test)
 acc_perceptron = round(perceptron.score(X_train, Y_train) * 100, 2)
 print(acc_perceptron)
 
-models = pd.DataFrame({
-    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
-              'Random Forest', 'Naive Bayes', 'Perceptron', 
-              'Stochastic Gradient Decent', 'Linear SVC', 
-              'Decision Tree'],
-    'Score': [acc_svc, acc_knn, acc_log, 
-              acc_random_forest, acc_gaussian, acc_perceptron, 
-              acc_sgd, acc_linear_svc, acc_decision_tree]})
-models.sort_values(by='Score', ascending=False)
+# models = pd.DataFrame({
+#     'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
+#               'Naive Bayes', 'Perceptron'
+#               ],
+#     'Score': [acc_svc, acc_knn, acc_log, 
+#               acc_gaussian, acc_perceptron
+#               ]})
+# models.sort_values(by='Score', ascending=False)
 
-submission = pd.DataFrame({
-        "PassengerId": test_df["PassengerId"],
-        "Survived": Y_pred
-    })
+# submission = pd.DataFrame({
+#         "PassengerId": test_df["PassengerId"],
+#         "Survived": Y_pred
+#     })
 # submission.to_csv('../output/submission.csv', index=False)
 
 
